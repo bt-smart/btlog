@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/bt-smart/btlog"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -19,12 +22,28 @@ func main() {
 		Compress:      true,              // 是否压缩旧文件
 	}
 
-	err := btlog.InitLogger(cfg)
-	if err != nil {
-		panic(err)
+	if err := btlog.InitLogger(cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "初始化日志失败: %v\n", err)
+		os.Exit(1)
 	}
+	defer func() {
+		if err := btlog.Close(); err != nil {
+			fmt.Fprintf(os.Stderr, "关闭日志器失败: %v\n", err)
+		}
+	}()
 
-	btlog.Info("这是一条信息日志")
-	btlog.Warn("这是一条警告日志", zap.String("key", "value"))
-	btlog.Error("这是一条错误日志", zap.Int("code", 500))
+	btlog.Info("应用启动成功",
+		zap.String("env", "development"),
+		zap.Int("pid", os.Getpid()),
+	)
+
+	btlog.Warn("系统资源使用率较高",
+		zap.Int("cpu_usage", 85),
+		zap.Int("memory_usage", 90),
+	)
+
+	btlog.Error("数据库连接失败",
+		zap.String("db_host", "localhost"),
+		zap.Int("port", 5432),
+	)
 }

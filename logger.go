@@ -29,12 +29,40 @@ type Config struct {
 	Compress bool
 }
 
-var logger *zap.Logger
+var (
+	logger *zap.Logger
+	hook   *lumberjack.Logger
+)
+
+// sync 同步日志缓冲区到磁盘
+// 如果logger已初始化,则调用其Sync方法将缓冲区数据刷新到磁盘
+// 如果logger未初始化,则直接返回nil
+func sync() error {
+	if logger != nil {
+		return logger.Sync()
+	}
+	return nil
+}
+
+// Close 关闭日志文件
+// 首先调用sync()方法将缓冲区数据刷新到磁盘
+// 如果sync()返回错误则直接返回该错误
+// 如果hook不为nil,则调用其Close()方法关闭日志文件
+// 返回关闭文件时可能产生的错误
+func Close() error {
+	if err := sync(); err != nil {
+		return err
+	}
+	if hook != nil {
+		return hook.Close()
+	}
+	return nil
+}
 
 // InitLogger 初始化日志配置
 func InitLogger(cfg *Config) error {
 	// 创建lumberjack的日志切割配置
-	hook := &lumberjack.Logger{
+	hook = &lumberjack.Logger{
 		Filename:   cfg.FilePath,
 		MaxSize:    cfg.MaxSize,
 		MaxBackups: cfg.MaxBackups,
