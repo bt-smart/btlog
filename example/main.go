@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/bt-smart/btlog"
@@ -23,12 +23,12 @@ func main() {
 	}
 
 	if err := btlog.InitLogger(cfg); err != nil {
-		fmt.Fprintf(os.Stderr, "初始化日志失败: %v\n", err)
+		log.Printf("初始化日志失败: %v\n", err)
 		os.Exit(1)
 	}
 	defer func() {
 		if err := btlog.Close(); err != nil {
-			fmt.Fprintf(os.Stderr, "关闭日志器失败: %v\n", err)
+			log.Printf("关闭日志器失败: %v\n", err)
 		}
 	}()
 
