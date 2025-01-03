@@ -1,6 +1,6 @@
 # btlog
 
-一个基于 [zap](https://github.com/uber-go/zap) 实现的高性能结构化日志库，支持日志分割、多输出等特性。
+一个基于 [zap](https://github.com/uber-go/zap) 实现的日志工具
 
 ## 功能特性
 
