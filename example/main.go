@@ -33,7 +33,7 @@ func main() {
 		MaxAge:        28,                // 保留旧文件的最大天数
 		Compress:      true,              // 是否压缩旧文件
 		LokiConfig: btzap.LokiConfig{ // Loki配置
-			URL:        "http://192.168.98.207:3100",
+			URL:        "http://192.168.98.214:3100",
 			BatchSize:  100,
 			Labels:     map[string]string{"service_name": "btlog-demo-dev"},
 			HTTPClient: httpClient,
