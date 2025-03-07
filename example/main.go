@@ -22,7 +22,7 @@ func main() {
 
 	cfg := &btzap.Config{
 		EnableConsole: true,              // 是否启用控制台日志输出
-		EnableFile:    true,              // 是否启用文件日志输出
+		EnableFile:    false,             // 是否启用文件日志输出
 		EnableLoki:    true,              // 是否启用Loki日志输出
 		ConsoleLevel:  zapcore.InfoLevel, // 控制台输出的最小日志级别
 		FileLevel:     zapcore.InfoLevel, // 文件输出的最小日志级别
