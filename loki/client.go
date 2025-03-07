@@ -209,7 +209,7 @@ func (c *Client) flush() {
 			labels[k] = v
 		}
 		// 添加日志级别标签
-		labels["detected_level"] = pkg.LevelToString(level)
+		labels["level"] = pkg.LevelToString(level)
 
 		streams = append(streams, Stream{
 			Stream: labels,
