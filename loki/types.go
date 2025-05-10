@@ -1,9 +1,8 @@
 package loki
 
 import (
+	"go.uber.org/zap/zapcore"
 	"net/http"
-
-	"github.com/bt-smart/btlog/pkg"
 )
 
 // Stream 表示一个日志流
@@ -36,7 +35,7 @@ type ClientConfig struct {
 	// MaxWaitTime 定义强制发送的最大等待时间（秒）
 	MaxWaitTime int64
 	// MinLevel 定义最低日志级别，低于此级别的日志将被忽略
-	MinLevel pkg.LogLevel
+	MinLevel zapcore.Level
 	// HTTPClient 是用于发送请求的 HTTP 客户端
 	// 如果为 nil，将使用 http.DefaultClient
 	HTTPClient *http.Client

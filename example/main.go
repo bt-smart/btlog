@@ -26,6 +26,7 @@ func main() {
 		EnableLoki:    true,              // 是否启用Loki日志输出
 		ConsoleLevel:  zapcore.InfoLevel, // 控制台输出的最小日志级别
 		FileLevel:     zapcore.InfoLevel, // 文件输出的最小日志级别
+		LokiLevel:     zapcore.InfoLevel, // loki输出的最小日志级别
 		EnableCaller:  true,              // 是否记录调用方信息
 		FilePath:      "./logs/app.log",  // 日志文件路径
 		MaxSize:       100,               // 日志文件最大大小(MB)

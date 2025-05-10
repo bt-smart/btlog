@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"go.uber.org/zap/zapcore"
 	"io"
 	"log"
 	"net/http"
@@ -72,22 +73,22 @@ func NewClient(config ClientConfig) (*Client, error) {
 
 // Debug 记录调试级别的日志
 func (c *Client) Debug(message string) error {
-	return c.pushLogWithLevel(message, pkg.LevelDebug)
+	return c.pushLogWithLevel(message, zapcore.DebugLevel)
 }
 
 // Info 记录信息级别的日志
 func (c *Client) Info(message string) error {
-	return c.pushLogWithLevel(message, pkg.LevelInfo)
+	return c.pushLogWithLevel(message, zapcore.InfoLevel)
 }
 
 // Warn 记录警告级别的日志
 func (c *Client) Warn(message string) error {
-	return c.pushLogWithLevel(message, pkg.LevelWarn)
+	return c.pushLogWithLevel(message, zapcore.WarnLevel)
 }
 
 // Error 记录错误级别的日志
 func (c *Client) Error(message string) error {
-	return c.pushLogWithLevel(message, pkg.LevelError)
+	return c.pushLogWithLevel(message, zapcore.ErrorLevel)
 }
 
 // pushLogWithLevel 内部方法，处理带级别的日志推送
@@ -97,7 +98,7 @@ func (c *Client) Error(message string) error {
 //
 // 返回：
 //   - error: 如果客户端未启动或已关闭，或者推送失败则返回错误
-func (c *Client) pushLogWithLevel(message string, level pkg.LogLevel) error {
+func (c *Client) pushLogWithLevel(message string, level zapcore.Level) error {
 	// 检查是否已关闭或未启动
 	if c.closed.Load() {
 		return fmt.Errorf("client is closed")
@@ -192,7 +193,7 @@ func (c *Client) flush() {
 	}
 
 	// 按日志级别分组
-	levelGroups := make(map[pkg.LogLevel][][2]string)
+	levelGroups := make(map[zapcore.Level][][2]string)
 	for _, entry := range entries {
 		levelGroups[entry.Level] = append(levelGroups[entry.Level], [2]string{
 			strconv.FormatInt(entry.Timestamp, 10),
@@ -209,7 +210,7 @@ func (c *Client) flush() {
 			labels[k] = v
 		}
 		// 添加日志级别标签
-		labels["level"] = pkg.LevelToString(level)
+		labels["level"] = level.String()
 
 		streams = append(streams, Stream{
 			Stream: labels,

@@ -2,6 +2,7 @@
 package pkg
 
 import (
+	"go.uber.org/zap/zapcore"
 	"sync"
 )
 
@@ -17,7 +18,7 @@ type LogEntry struct {
 	Message string
 
 	// Level 日志级别
-	Level LogLevel
+	Level zapcore.Level
 }
 
 // Buffer 实现了一个线程安全的日志缓冲区

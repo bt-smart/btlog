@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/bt-smart/btlog/loki"
-	"github.com/bt-smart/btlog/pkg"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -26,6 +25,8 @@ type Config struct {
 	ConsoleLevel zapcore.Level
 	// 文件输出的最小日志级别
 	FileLevel zapcore.Level
+	// loki输出的最小日志级别
+	LokiLevel zapcore.Level
 	// 是否记录调用方信息
 	EnableCaller bool
 	// 日志文件路径
@@ -109,7 +110,7 @@ func NewLogger(cfg *Config) (*Logger, error) {
 			URL:        cfg.LokiConfig.URL,
 			BatchSize:  cfg.LokiConfig.BatchSize,
 			Labels:     cfg.LokiConfig.Labels,
-			MinLevel:   pkg.LevelInfo,
+			MinLevel:   cfg.LokiLevel,
 			HTTPClient: cfg.LokiConfig.HTTPClient,
 			// 添加一些合理的默认值
 			MinWaitTime: 1,  // 1秒
